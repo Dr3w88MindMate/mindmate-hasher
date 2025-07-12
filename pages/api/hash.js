@@ -14,9 +14,13 @@ export default function handler(req, res) {
     return;
   }
 
-  // Remove all non-digit characters (including '+', spaces, etc.)
+  // Clean phone number: remove all non-digit characters (e.g. '+', spaces)
   const cleaned = value.replace(/\D/g, '');
 
-  const hash = crypto.createHash('sha256').update(cleaned).digest('hex');
+  // 🔐 Use static salt from environment variable
+  const salt = process.env.SALT || '';
+  const saltedInput = salt + cleaned;
+
+  const hash = crypto.createHash('sha256').update(saltedInput).digest('hex');
   res.status(200).json({ hash });
 }
