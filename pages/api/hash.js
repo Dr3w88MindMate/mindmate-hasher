@@ -12,13 +12,9 @@ export default function handler(req, res) {
   const apiKey = req.headers['x-api-key'];
   const expectedKey = process.env.API_KEY;
 
-if (!apiKey || apiKey !== expectedKey) {
-  return res.status(401).json({ 
-    error: 'Unauthorized', 
-    received: apiKey || null, 
-    expected: expectedKey || null 
-  });
-}
+  if (!apiKey || apiKey !== expectedKey) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
 
   // ✅ Validate request body
   const { value } = req.body;
